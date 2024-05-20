@@ -9,4 +9,6 @@ export const EVM = {
   /** Swagger Auth */
   SWAGGER_AUTH_USERNAME: process.env.SWAGGER_AUTH_USERNAME || 'admin',
   SWAGGER_AUTH_PASSWORD: process.env.SWAGGER_AUTH_PASSWORD || 'admin',
+  /** Phone Bypass Code */
+  PHONE_BYPASS_CODE: process.env.PHONE_BYPASS_CODE || '041119',
 };
