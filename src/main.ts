@@ -1,15 +1,19 @@
+import './common/doppler';
+
 import {
   Logger,
   NestFactory,
   setupNestjsTools,
 } from '@danieluhm2004/nestjs-tools';
 
+import moment from 'moment';
 import { AppModule } from './app.module';
 import { EVM } from './common/evm';
 import { Opcode } from './common/opcode';
 
+moment.locale('ko');
 async function bootstrap() {
-  const app = await NestFactory.create(AppModule);
+  const app = await NestFactory.create(AppModule, { cors: true });
   await setupNestjsTools(app, {
     swagger: {
       opcode: Opcode,
@@ -17,6 +21,7 @@ async function bootstrap() {
         username: EVM.SWAGGER_AUTH_USERNAME,
         password: EVM.SWAGGER_AUTH_PASSWORD,
       },
+      tags: [],
     },
   });
 

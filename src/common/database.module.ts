@@ -7,10 +7,11 @@ import { Module } from '@nestjs/common';
 import { EVM } from './evm';
 
 export const options: TypeOrmModuleOptions = {
-  type: 'mysql',
+  type: 'postgres',
   url: EVM.DATABASE_URL,
   keepConnectionAlive: true,
   synchronize: false,
+  migrations: ['dist/migrations/*.js'],
   entities: [],
 };
 
