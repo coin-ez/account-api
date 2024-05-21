@@ -22,13 +22,16 @@
   },
   "dependencies": {
     "@danieluhm2004/nestjs-tools": "^1.1.4",
+    "bcryptjs": "^2.4.3",
     "class-validator": "^0.14.1",
     "lodash": "^4.17.21",
     "moment": "^2.30.1",
+    "nestjs-real-ip": "^3.0.1",
     "pg": "^8.11.5",
     "reflect-metadata": "^0.1.13",
     "rxjs": "^7.2.0",
-    "typeorm": "^0.3.20"
+    "typeorm": "^0.3.20",
+    "ua-parser-js": "^1.0.37"
   },
   "devDependencies": {
     "@nestjs/cli": "^10.3.2",
