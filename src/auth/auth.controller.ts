@@ -17,10 +17,10 @@ import { User } from '../user/user.entity';
 import { AuthorizedUser } from './auth.decorator';
 import {
   AuthGetResponseDto,
+  AuthLoginEmailBodyDto,
+  AuthLoginEmailResponseDto,
   AuthLoginPasswordBodyDto,
   AuthLoginPasswordResponseDto,
-  AuthLoginPhoneBodyDto,
-  AuthLoginPhoneResponseDto,
   AuthSignupBodyDto,
   AuthSignupResponseDto,
   AuthUpdateBodyDto,
@@ -79,16 +79,16 @@ export class AuthController {
   }
 
   @Post('login/magiclink')
-  @NTApiResponse(AuthLoginPhoneResponseDto)
+  @NTApiResponse(AuthLoginEmailResponseDto)
   @SerializeOptions({ groups: ['flag:token', 'role:me'] })
   @ApiOperation({ summary: '인증코드로 로그인을 진행합니다.' })
-  async loginWithPhone(
-    @Body() body: AuthLoginPhoneBodyDto,
+  async loginWithEmail(
+    @Body() body: AuthLoginEmailBodyDto,
     @Headers('User-Agent') name: string,
     @RealIP() ipAddress: string,
   ) {
-    const res = new AuthLoginPhoneResponseDto();
-    res.user = await this.service.loginWithPhone(body);
+    const res = new AuthLoginEmailResponseDto();
+    res.user = await this.service.loginWithEmail(body);
     res.session = await this.service.createSession(res.user, {
       name,
       ipAddress,

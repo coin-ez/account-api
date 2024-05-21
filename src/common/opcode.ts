@@ -27,20 +27,20 @@ export const Opcode = {
     HttpStatus.NOT_FOUND,
     '해당 사용자를 찾을 수 없습니다.',
   ),
-  AlreadyUsingPhoneNum: $(
+  AlreadyUsingEmailAddress: $(
     2006,
     HttpStatus.BAD_REQUEST,
-    '이미 사용중인 전화번호입니다.',
+    '이미 사용중인 이메일입니다.',
   ),
-  ExcessedPhone: $(
+  ExcessedEmail: $(
     2007,
     HttpStatus.BAD_REQUEST,
-    '전화번호 인증 횟수를 초과하였습니다.',
+    '이메일 인증 횟수를 초과하였습니다.',
   ),
-  CannotFindPhone: $(
+  CannotFindEmail: $(
     2008,
     HttpStatus.NOT_FOUND,
-    '해당 전화번호를 찾을 수 없습니다.',
+    '해당 이메일을 찾을 수 없습니다.',
   ),
   InvalidVerifyCode: $(
     2009,

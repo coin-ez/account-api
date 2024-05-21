@@ -11,9 +11,9 @@ import { User } from '../user/user.entity';
 import { Session } from './session/session.entity';
 
 export const authLoginMethod = [
-  'login-with-phone',
+  'login-with-email',
   'login-with-password',
-  'signup-with-phone',
+  'signup-with-email',
 ] as const;
 
 export type AuthLoginMethod = (typeof authLoginMethod)[number];
@@ -37,14 +37,14 @@ export class AuthSignupBodyDto {
   marketing?: boolean;
 
   @IsString({ description: '인증 ID' })
-  phoneId: string;
+  emailId: string;
 }
 
 export class AuthUpdateBodyDto extends PartialType(
   PickType(User, ['name', 'profileUrl']),
 ) {
   @IsString({ description: '인증 ID', optional: true })
-  phoneId?: string;
+  emailId?: string;
 
   @IsString({ description: '비밀번호', optional: true })
   password?: string;
@@ -58,9 +58,9 @@ export class AuthUpdateBodyDto extends PartialType(
 
 export class AuthUpdateResponseDto extends AuthGetResponseDto {}
 
-export class AuthLoginPhoneBodyDto {
+export class AuthLoginEmailBodyDto {
   @IsString({ description: '인증 ID' })
-  phoneId: string;
+  emailId: string;
 }
 
 export class AuthLoginGetMethodResponseDto {
@@ -69,14 +69,14 @@ export class AuthLoginGetMethodResponseDto {
 }
 
 export class AuthLoginPasswordBodyDto {
-  @IsString({ description: '전화번호' })
-  phoneNum: string;
+  @IsString({ description: '이메일' })
+  emailAddress: string;
 
   @IsString({ description: '비밀번호' })
   password: string;
 }
 
-export class AuthLoginPhoneResponseDto {
+export class AuthLoginEmailResponseDto {
   @IsNested({ type: User, description: '사용자 정보' })
   user: User;
 
@@ -86,5 +86,5 @@ export class AuthLoginPhoneResponseDto {
 
 export class AuthKycConfirmResponseDto {}
 
-export class AuthLoginPasswordResponseDto extends AuthLoginPhoneResponseDto {}
-export class AuthSignupResponseDto extends AuthLoginPhoneResponseDto {}
+export class AuthLoginPasswordResponseDto extends AuthLoginEmailResponseDto {}
+export class AuthSignupResponseDto extends AuthLoginEmailResponseDto {}

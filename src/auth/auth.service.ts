@@ -3,7 +3,7 @@ import _ from 'lodash';
 import { Opcode } from '../common/opcode';
 import { User } from '../user/user.entity';
 import { UserService } from '../user/user.service';
-import { PhoneService } from './phone/phone.service';
+import { EmailService } from './email/email.service';
 import { Session } from './session/session.entity';
 import { SessionService } from './session/session.service';
 
@@ -12,27 +12,27 @@ export class AuthService {
   constructor(
     private readonly userService: UserService,
     private readonly sessionService: SessionService,
-    private readonly phoneService: PhoneService,
+    private readonly emailService: EmailService,
   ) {}
 
   async signup(data: {
     name?: string;
-    phoneId: string;
+    emailId: string;
     password?: string;
     marketing?: boolean;
   }) {
-    const { name, phoneId, password, marketing } = data;
-    const phone = await this.phoneService.lookup(phoneId);
+    const { name, emailId, password, marketing } = data;
+    const email = await this.emailService.lookup(emailId);
 
-    const { phoneNum } = phone;
+    const { emailAddress } = email;
     const user = await this.userService.create({
       name,
-      phoneNum,
+      emailAddress,
       password,
       marketing,
     });
 
-    await this.phoneService.revoke(phone);
+    await this.emailService.revoke(email);
     return user;
   }
 
@@ -40,34 +40,37 @@ export class AuthService {
     user: User,
     data: {
       name?: string;
-      phoneId?: string;
+      emailId?: string;
       email?: string;
       marketing?: boolean;
       profileUrl?: string;
       password?: string;
     },
   ): Promise<User> {
-    const updates: Partial<User> = _.omit(data, 'phoneId');
-    if (data.phoneId) {
-      const phone = await this.phoneService.lookup(data.phoneId);
-      updates.phoneNum = phone.phoneNum;
-      await this.phoneService.revoke(phone);
+    const updates: Partial<User> = _.omit(data, 'emailId');
+    if (data.emailId) {
+      const email = await this.emailService.lookup(data.emailId);
+      updates.emailAddress = email.emailAddress;
+      await this.emailService.revoke(email);
     }
 
     return this.userService.update(user, updates);
   }
 
-  async loginWithPhone(data: { phoneId: string }): Promise<User> {
-    const phone = await this.phoneService.lookup(data.phoneId);
-    const user = await this.userService.findOneByPhoneNum(phone.phoneNum);
+  async loginWithEmail(data: { emailId: string }): Promise<User> {
+    const email = await this.emailService.lookup(data.emailId);
+    const user = await this.userService.findOneByEmailAddress(
+      email.emailAddress,
+    );
+
     if (!user) throw Opcode.CannotFindUser();
-    await this.phoneService.revoke(phone);
+    await this.emailService.revoke(email);
     return user;
   }
 
-  async loginWithPassword(data: { phoneNum: string; password: string }) {
-    const { phoneNum, password } = data;
-    const user = await this.userService.findOneByPhoneNum(phoneNum);
+  async loginWithPassword(data: { emailAddress: string; password: string }) {
+    const { emailAddress, password } = data;
+    const user = await this.userService.findOneByEmailAddress(emailAddress);
     if (!user) throw Opcode.PasswordNotMatch();
     const isMatch = await this.userService.comparePassword(user, password);
     if (!isMatch) throw Opcode.PasswordNotMatch();

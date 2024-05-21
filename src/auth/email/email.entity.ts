@@ -9,20 +9,20 @@ import {
 } from 'typeorm';
 
 @Entity()
-export class Phone extends BaseEntity {
+export class Email extends BaseEntity {
   @PrimaryGeneratedColumn('uuid')
   @IsString({ description: '고유 ID' })
-  phoneId: string;
+  emailId: string;
 
   @Column({ length: 13 })
   @IsString({
-    description: '전화번호',
+    description: '이메일',
     pattern: {
       regex: /^\d{3}-\d{3,4}-\d{4}$/,
-      message: '올바른 전화번호를 입력해주세요.',
+      message: '올바른 이메일을 입력해주세요.',
     },
   })
-  phoneNum: string;
+  emailAddress: string;
 
   @Column({ length: 6 })
   @IsString({

@@ -24,13 +24,13 @@ export class User extends BaseEntity {
   @Column()
   @Expose({ groups: ['role:admin', 'role:me'] })
   @IsString({
-    description: '전화번호',
+    description: '이메일',
     pattern: {
       regex: /^\d{3}-\d{3,4}-\d{4}$/,
-      message: '올바른 전화번호를 입력해주세요.',
+      message: '올바른 이메일을 입력해주세요.',
     },
   })
-  phoneNum: string;
+  emailAddress: string;
 
   @Column({ nullable: true })
   @IsString({ description: '프로필 사진', nullable: true, optional: true })
