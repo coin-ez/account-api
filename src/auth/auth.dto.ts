@@ -49,7 +49,7 @@ export class AuthUpdateBodyDto extends PartialType(
   @IsString({ description: '비밀번호', optional: true })
   password?: string;
 
-  @IsString({ description: '이메일', optional: true })
+  @IsString({ description: '이메일', isEmail: true, optional: true })
   email?: string;
 
   @IsBoolean({ description: '마케팅 수신 동의 여부', optional: true })
@@ -69,7 +69,7 @@ export class AuthLoginGetMethodResponseDto {
 }
 
 export class AuthLoginPasswordBodyDto {
-  @IsString({ description: '이메일' })
+  @IsString({ description: '이메일', isEmail: true })
   emailAddress: string;
 
   @IsString({ description: '비밀번호' })

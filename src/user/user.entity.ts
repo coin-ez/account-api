@@ -23,13 +23,7 @@ export class User extends BaseEntity {
 
   @Column()
   @Expose({ groups: ['role:admin', 'role:me'] })
-  @IsString({
-    description: '이메일',
-    pattern: {
-      regex: /^\d{3}-\d{3,4}-\d{4}$/,
-      message: '올바른 이메일을 입력해주세요.',
-    },
-  })
+  @IsString({ description: '이메일', isEmail: true })
   emailAddress: string;
 
   @Column({ nullable: true })

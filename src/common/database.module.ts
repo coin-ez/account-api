@@ -4,6 +4,9 @@ import {
 } from '@danieluhm2004/nestjs-tools';
 
 import { Module } from '@nestjs/common';
+import { Email } from 'src/auth/email/email.entity';
+import { Session } from 'src/auth/session/session.entity';
+import { User } from 'src/user/user.entity';
 import { EVM } from './evm';
 
 export const options: TypeOrmModuleOptions = {
@@ -12,7 +15,7 @@ export const options: TypeOrmModuleOptions = {
   keepConnectionAlive: true,
   synchronize: false,
   migrations: ['dist/migrations/*.js'],
-  entities: [],
+  entities: [User, Session, Email],
 };
 
 @Module({ imports: [TypeOrmModule.forRoot(options)] })
