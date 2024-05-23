@@ -22,7 +22,7 @@ export class UserService {
 
   async create(data: {
     name: string;
-    emailAddress: string;
+    email: string;
     marketing?: boolean;
     profileUrl?: string;
     password: string;
@@ -31,10 +31,8 @@ export class UserService {
     const updates: Partial<User> = _.omit(data, ['password']);
     updates.password = hashSync(data.password, 10);
     const user = this.repository.create(updates);
-    this.logger.log(`${user.name}(${user.emailAddress}) 사용자를 생성합니다.`);
-    const existsEmailAddress = await this.isUsingEmailAddress(
-      user.emailAddress,
-    );
+    this.logger.log(`${user.name}(${user.email}) 사용자를 생성합니다.`);
+    const existsEmailAddress = await this.isUsingEmail(user.email);
 
     if (existsEmailAddress) throw Opcode.AlreadyUsingEmailAddress();
     await user.save();
@@ -51,7 +49,7 @@ export class UserService {
     const searchTarget = {
       userId: WhereType.Equals,
       name: WhereType.Contains,
-      emailAddress: WhereType.Equals,
+      email: WhereType.Equals,
     };
 
     let where: FindOptionsWhere<User>[] | FindOptionsWhere<User> = {};
@@ -68,9 +66,9 @@ export class UserService {
     return user;
   }
 
-  async findOneByEmailAddress(emailAddress: string): Promise<User | undefined> {
+  async findOneByEmail(email: string): Promise<User | undefined> {
     const deletedAt = IsNull();
-    return this.repository.findOneBy({ emailAddress, deletedAt });
+    return this.repository.findOneBy({ email, deletedAt });
   }
 
   private async getHashedPassword(user: User): Promise<string> {
@@ -94,9 +92,9 @@ export class UserService {
     return compareSync(password, hashedPassword);
   }
 
-  async isUsingEmailAddress(emailAddress: string): Promise<boolean> {
+  async isUsingEmail(email: string): Promise<boolean> {
     const deletedAt = IsNull();
-    const user = await this.repository.findOneBy({ emailAddress, deletedAt });
+    const user = await this.repository.findOneBy({ email, deletedAt });
     return !!user;
   }
 
@@ -104,7 +102,7 @@ export class UserService {
     user: User,
     data: {
       name?: string;
-      emailAddress?: string;
+      email?: string;
       marketing?: boolean;
       profileUrl?: string;
       password?: string;
@@ -112,16 +110,14 @@ export class UserService {
     },
   ): Promise<User> {
     const updates: Partial<User> = _.omit(data);
-    if (data.emailAddress && data.emailAddress !== user.emailAddress) {
-      const existsEmailAddress = await this.isUsingEmailAddress(
-        data.emailAddress,
-      );
+    if (data.email && data.email !== user.email) {
+      const existsEmailAddress = await this.isUsingEmail(data.email);
       if (existsEmailAddress) throw Opcode.AlreadyUsingEmailAddress();
     }
 
     if (data.password) updates.password = hashSync(data.password, 10);
     const updatedUser = this.repository.merge(user, updates);
-    this.logger.log(`${user.name}(${user.emailAddress}) 사용자를 수정합니다.`);
+    this.logger.log(`${user.name}(${user.email}) 사용자를 수정합니다.`);
 
     await updatedUser.save();
     await updatedUser.reload();
@@ -129,7 +125,7 @@ export class UserService {
   }
 
   async delete(user: User): Promise<void> {
-    this.logger.log(`${user.name}(${user.emailAddress}) 사용자를 삭제합니다.`);
+    this.logger.log(`${user.name}(${user.email}) 사용자를 삭제합니다.`);
     user.deletedAt = new Date();
     await user.save();
   }

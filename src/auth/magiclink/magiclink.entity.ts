@@ -9,14 +9,14 @@ import {
 } from 'typeorm';
 
 @Entity()
-export class Email extends BaseEntity {
+export class Magiclink extends BaseEntity {
   @PrimaryGeneratedColumn('uuid')
   @IsString({ description: '고유 ID' })
-  emailId: string;
+  magiclinkId: string;
 
   @Column()
   @IsString({ description: '이메일', isEmail: true })
-  emailAddress: string;
+  email: string;
 
   @Column({ length: 6 })
   @IsString({

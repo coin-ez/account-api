@@ -12,18 +12,18 @@ import {
   EmailSendResponseDto,
   EmailVerifyBodyDto,
   EmailVerifyResponseDto,
-} from './email.dto';
-import { EmailService } from './email.service';
+} from './magiclink.dto';
+import { MagiclinkService } from './magiclink.service';
 
 @ApiBearerAuth()
 @ApiTags('Auth / Email')
 @Controller({ path: 'auth/email', version: '1' })
 export class EmailController {
-  constructor(private readonly service: EmailService) {}
+  constructor(private readonly service: MagiclinkService) {}
 
   @Post('send')
   @NTApiResponse(EmailSendResponseDto)
-  @ApiOperation({ summary: '이메일 인증을 발송합니다.' })
+  @ApiOperation({ summary: '매직링크 인증을 발송합니다.' })
   async find(@Body() body: EmailSendBodyDto) {
     const res = new EmailSendResponseDto();
     await this.service.create(body);
@@ -32,11 +32,11 @@ export class EmailController {
 
   @Post('verify')
   @NTApiResponse(EmailVerifyResponseDto)
-  @ApiOperation({ summary: '이메일 인증을 검증합니다.' })
+  @ApiOperation({ summary: '매직링크를 인증을 검증합니다.' })
   async findOne(@Body() body: EmailVerifyBodyDto) {
     const res = new EmailVerifyResponseDto();
-    const email = await this.service.verify(body);
-    res.emailId = email.emailId;
+    const magiclink = await this.service.verify(body);
+    res.magiclinkId = magiclink.magiclinkId;
     return res;
   }
 }

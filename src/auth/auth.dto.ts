@@ -11,9 +11,9 @@ import { User } from '../user/user.entity';
 import { Session } from './session/session.entity';
 
 export const authLoginMethod = [
-  'login-with-email',
+  'login-with-magiclink',
   'login-with-password',
-  'signup-with-email',
+  'signup-with-magiclink',
 ] as const;
 
 export type AuthLoginMethod = (typeof authLoginMethod)[number];
@@ -37,14 +37,14 @@ export class AuthSignupBodyDto {
   marketing?: boolean;
 
   @IsString({ description: '인증 ID' })
-  emailId: string;
+  magiclinkId: string;
 }
 
 export class AuthUpdateBodyDto extends PartialType(
   PickType(User, ['name', 'profileUrl']),
 ) {
   @IsString({ description: '인증 ID', optional: true })
-  emailId?: string;
+  magiclinkId?: string;
 
   @IsString({ description: '비밀번호', optional: true })
   password?: string;
@@ -60,7 +60,7 @@ export class AuthUpdateResponseDto extends AuthGetResponseDto {}
 
 export class AuthLoginEmailBodyDto {
   @IsString({ description: '인증 ID' })
-  emailId: string;
+  magiclinkId: string;
 }
 
 export class AuthLoginGetMethodResponseDto {
@@ -70,7 +70,7 @@ export class AuthLoginGetMethodResponseDto {
 
 export class AuthLoginPasswordBodyDto {
   @IsString({ description: '이메일', isEmail: true })
-  emailAddress: string;
+  email: string;
 
   @IsString({ description: '비밀번호' })
   password: string;

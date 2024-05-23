@@ -9,6 +9,6 @@ export const EVM = {
   /** Swagger Auth */
   SWAGGER_AUTH_USERNAME: process.env.SWAGGER_AUTH_USERNAME || 'admin',
   SWAGGER_AUTH_PASSWORD: process.env.SWAGGER_AUTH_PASSWORD || 'admin',
-  /** Email Bypass Code */
-  EMAIL_BYPASS_CODE: process.env.EMAIL_BYPASS_CODE || '041119',
+  /** Magiclink Bypass Code */
+  MAGICLINK_BYPASS_CODE: process.env.MAGICLINK_BYPASS_CODE || '041119',
 };

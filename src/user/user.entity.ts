@@ -24,7 +24,7 @@ export class User extends BaseEntity {
   @Column()
   @Expose({ groups: ['role:admin', 'role:me'] })
   @IsString({ description: '이메일', isEmail: true })
-  emailAddress: string;
+  email: string;
 
   @Column({ nullable: true })
   @IsString({ description: '프로필 사진', nullable: true, optional: true })

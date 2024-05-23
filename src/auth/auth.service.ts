@@ -3,7 +3,7 @@ import _ from 'lodash';
 import { Opcode } from '../common/opcode';
 import { User } from '../user/user.entity';
 import { UserService } from '../user/user.service';
-import { EmailService } from './email/email.service';
+import { MagiclinkService } from './magiclink/magiclink.service';
 import { Session } from './session/session.entity';
 import { SessionService } from './session/session.service';
 
@@ -12,27 +12,27 @@ export class AuthService {
   constructor(
     private readonly userService: UserService,
     private readonly sessionService: SessionService,
-    private readonly emailService: EmailService,
+    private readonly magiclinkService: MagiclinkService,
   ) {}
 
   async signup(data: {
     name?: string;
-    emailId: string;
+    magiclinkId: string;
     password?: string;
     marketing?: boolean;
   }) {
-    const { name, emailId, password, marketing } = data;
-    const email = await this.emailService.lookup(emailId);
+    const { name, magiclinkId, password, marketing } = data;
+    const magiclink = await this.magiclinkService.lookup(magiclinkId);
 
-    const { emailAddress } = email;
+    const { email } = magiclink;
     const user = await this.userService.create({
       name,
-      emailAddress,
+      email,
       password,
       marketing,
     });
 
-    await this.emailService.revoke(email);
+    await this.magiclinkService.revoke(magiclink);
     return user;
   }
 
@@ -40,37 +40,34 @@ export class AuthService {
     user: User,
     data: {
       name?: string;
-      emailId?: string;
-      email?: string;
+      magiclinkId?: string;
       marketing?: boolean;
       profileUrl?: string;
       password?: string;
     },
   ): Promise<User> {
-    const updates: Partial<User> = _.omit(data, 'emailId');
-    if (data.emailId) {
-      const email = await this.emailService.lookup(data.emailId);
-      updates.emailAddress = email.emailAddress;
-      await this.emailService.revoke(email);
+    const updates: Partial<User> = _.omit(data, 'magiclinkId');
+    if (data.magiclinkId) {
+      const magiclink = await this.magiclinkService.lookup(data.magiclinkId);
+      updates.email = magiclink.email;
+      await this.magiclinkService.revoke(magiclink);
     }
 
     return this.userService.update(user, updates);
   }
 
-  async loginWithEmail(data: { emailId: string }): Promise<User> {
-    const email = await this.emailService.lookup(data.emailId);
-    const user = await this.userService.findOneByEmailAddress(
-      email.emailAddress,
-    );
+  async loginWithEmail(data: { magiclinkId: string }): Promise<User> {
+    const magiclink = await this.magiclinkService.lookup(data.magiclinkId);
+    const user = await this.userService.findOneByEmail(magiclink.email);
 
     if (!user) throw Opcode.CannotFindUser();
-    await this.emailService.revoke(email);
+    await this.magiclinkService.revoke(magiclink);
     return user;
   }
 
-  async loginWithPassword(data: { emailAddress: string; password: string }) {
-    const { emailAddress, password } = data;
-    const user = await this.userService.findOneByEmailAddress(emailAddress);
+  async loginWithPassword(data: { email: string; password: string }) {
+    const { email, password } = data;
+    const user = await this.userService.findOneByEmail(email);
     if (!user) throw Opcode.PasswordNotMatch();
     const isMatch = await this.userService.comparePassword(user, password);
     if (!isMatch) throw Opcode.PasswordNotMatch();

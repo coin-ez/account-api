@@ -17,7 +17,7 @@ export class UserCreateBodyDto extends PickType(User, []) {
   profileUrl?: string;
 
   @IsString({ description: '이메일', isEmail: true })
-  emailAddress: string;
+  email: string;
 
   @IsString({ description: '비밀번호', minLength: 8 })
   password: string;
