@@ -11,4 +11,6 @@ export const EVM = {
   SWAGGER_AUTH_PASSWORD: process.env.SWAGGER_AUTH_PASSWORD || 'admin',
   /** Magiclink Bypass Code */
   MAGICLINK_BYPASS_CODE: process.env.MAGICLINK_BYPASS_CODE || '041119',
+  /** CoinEz Account API Key */
+  COINEZ_ACCOUNT_API_KEY: process.env.COINEZ_ACCOUNT_API_KEY as string,
 };

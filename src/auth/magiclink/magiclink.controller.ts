@@ -17,7 +17,7 @@ import { MagiclinkService } from './magiclink.service';
 
 @ApiBearerAuth()
 @ApiTags('Auth / Email')
-@Controller({ path: 'auth/email', version: '1' })
+@Controller({ path: 'auth/magiclink', version: '1' })
 export class EmailController {
   constructor(private readonly service: MagiclinkService) {}
 

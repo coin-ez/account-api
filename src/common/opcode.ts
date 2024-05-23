@@ -52,4 +52,9 @@ export const Opcode = {
     HttpStatus.UNAUTHORIZED,
     '만료되어 사용할 수 없는 토큰입니다.',
   ),
+  InternalEncryptError: $(
+    2011,
+    HttpStatus.INTERNAL_SERVER_ERROR,
+    '암호화 중 오류가 발생했습니다.',
+  ),
 };
