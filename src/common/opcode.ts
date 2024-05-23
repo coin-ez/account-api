@@ -47,4 +47,9 @@ export const Opcode = {
     HttpStatus.BAD_REQUEST,
     '인증번호가 일치하지 않습니다.',
   ),
+  ExpiredAccessToken: $(
+    2010,
+    HttpStatus.UNAUTHORIZED,
+    '만료되어 사용할 수 없는 토큰입니다.',
+  ),
 };

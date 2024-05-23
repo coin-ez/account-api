@@ -8,13 +8,7 @@ import { Injectable } from '@nestjs/common';
 import { randomBytes } from 'crypto';
 import _ from 'lodash';
 import moment from 'moment';
-import {
-  FindManyOptions,
-  FindOptionsWhere,
-  IsNull,
-  MoreThan,
-  Repository,
-} from 'typeorm';
+import { FindManyOptions, FindOptionsWhere, IsNull, Repository } from 'typeorm';
 import { UAParser } from 'ua-parser-js';
 import { Opcode } from '../../common/opcode';
 import { User } from '../../user/user.entity';
@@ -107,16 +101,13 @@ export class SessionService {
 
   async findOneByToken(token: string, showExpired = false): Promise<Session> {
     const user = { deletedAt: IsNull() };
-    const accessedAt = !showExpired
-      ? MoreThan(moment().subtract(3, 'months').toDate())
-      : undefined;
-    const session = await this.repository.findOneBy({
-      user,
-      token,
-      accessedAt,
-    });
+    const session = await this.repository.findOneBy({ user, token });
 
     if (!session) throw Opcode.CannotFindSession();
+    if (moment().subtract(3, 'months').isAfter(session.accessedAt)) {
+      throw Opcode.ExpiredAccessToken();
+    }
+
     session.accessedAt = new Date();
     return session.save();
   }
