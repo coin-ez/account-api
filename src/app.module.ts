@@ -12,6 +12,7 @@ import { EmailModule } from './email/email.module';
 import { InternalModule } from './internal/internal.module';
 import { UserMiddleware } from './user/user.middleware';
 import { UserModule } from './user/user.module';
+import { TronModule } from './tron/tron.module';
 
 @Module({
   imports: [
@@ -21,6 +22,7 @@ import { UserModule } from './user/user.module';
     AuthModule,
     EmailModule,
     InternalModule,
+    TronModule,
   ],
   controllers: [],
   providers: [],
