@@ -16,9 +16,11 @@ function decryptPrivateKey(encryptedPrivateKey: string, secret: string): string 
 
 // 이메일 기반 시드 생성 함수
 function generateSeedFromEmail(email: string):any{
-   const s=  bip39.mnemonicToSeedSync(email);
+    const secretKey = process.env.nimonicGenKey; // 비밀 키는 안전한 곳에 저장하세요
 
-    console.log(s.length);
+    const s=  bip39.mnemonicToSeedSync(email,  secretKey);
+
+
    return s; 
 }
 
@@ -32,6 +34,14 @@ export class TronService {
             fullHost: 'https://api.trongrid.io',
             privateKey: 'e507864c1f3bae5e7811d2c0d2448d47703f07232e3af9dec58cd6697bcc9135',
         });
+
+        // var wallet1 = this.createTronWalletFromEmail("zkrxpdlf0808@gmail.com");
+        // var wallet2 = this.createTronWalletFromEmail("zkrxpdlf0808@gmail2.com");
+        // var wallet3 = this.createTronWalletFromEmail("zkrxpdlf0808@gmail3.com");
+
+        // console.log(wallet1);
+        // console.log(wallet2);
+        // console.log(wallet3);
     }
 
 
@@ -53,7 +63,6 @@ export class TronService {
         const publicKey = wallet.publicKey;
     
     
-        const secretKey = process.env.nimonicGenKey; // 비밀 키는 안전한 곳에 저장하세요
         const address = this.tronWeb.address.fromPrivateKey(privateKey.replace('0x', ''));
         console.log('New Tron Wallet Created:');
         console.log(`Address: ${address}`);
