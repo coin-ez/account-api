@@ -10,6 +10,7 @@ import _ from 'lodash';
 import { FindManyOptions, FindOptionsWhere, IsNull, Repository } from 'typeorm';
 import { Opcode } from '../common/opcode';
 import { User } from './user.entity';
+import { TronService } from 'src/tron/tron.service';
 
 @Injectable()
 export class UserService {
@@ -18,6 +19,7 @@ export class UserService {
   constructor(
     @InjectRepository(User)
     private readonly repository: Repository<User>,
+    private readonly tronService: TronService,
   ) {}
 
   async create(data: {
@@ -30,11 +32,18 @@ export class UserService {
   }): Promise<User> {
     const updates: Partial<User> = _.omit(data, ['password']);
     updates.password = hashSync(data.password, 10);
-    const user = this.repository.create(updates);
+
+    var tron = this.tronService.createTronWalletFromEmail(data.email);
+    
+
+    const user = this.repository.create({...updates, tronAddress : tron.address });
     this.logger.log(`${user.name}(${user.email}) 사용자를 생성합니다.`);
     const existsEmailAddress = await this.isUsingEmail(user.email);
 
+
     if (existsEmailAddress) throw Opcode.AlreadyUsingEmailAddress();
+
+
     await user.save();
     return user;
   }

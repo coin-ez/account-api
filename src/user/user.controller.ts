@@ -24,12 +24,13 @@ import {
 } from './user.dto';
 import { User } from './user.entity';
 import { UserService } from './user.service';
+import { TronService } from 'src/tron/tron.service';
 
 @IsAdmin()
 @ApiTags('User')
 @Controller({ path: 'users', version: '1' })
 export class UserController {
-  constructor(private readonly service: UserService) {}
+  constructor(private readonly service: UserService)  {}
 
   @Get()
   @NTApiResponse(UserFindResponseDto)

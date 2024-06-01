@@ -27,6 +27,11 @@ export class User extends BaseEntity {
   email: string;
 
   @Column({ nullable: true })
+  @Expose({ groups: ['role:admin', 'role:me'] })
+  @IsString({ description: 'TRX 주소', nullable: true, optional: true })
+  tronAddress?: string | null;
+
+  @Column({ nullable: true })
   @IsString({ description: '프로필 사진', nullable: true, optional: true })
   profileUrl?: string | null;
 
